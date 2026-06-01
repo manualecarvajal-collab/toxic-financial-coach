@@ -6,22 +6,13 @@
   --color-toxic-red: #FF3131;
   --color-toxic-gray: #1A1A1A;
 
-  --font-family-brutal: "Inter", system-ui, sans-serif;
-  --font-family-mono: "JetBrains Mono", monospace;
+  --font-brutal: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
-:root {
+html, body {
   background-color: #050505;
   color: #ffffff;
-}
-
-html {
-  /* Forzar composición GPU estable en móviles */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
-body {
   margin: 0;
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;

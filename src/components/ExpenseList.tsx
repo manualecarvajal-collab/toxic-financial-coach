@@ -48,7 +48,6 @@ export default function ExpenseList({ expenses, onDeleteExpense, loading }: Prop
         {expenses.map((expense, index) => (
           <motion.div
             key={expense.id}
-            layout
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20, height: 0, marginBottom: 0 }}

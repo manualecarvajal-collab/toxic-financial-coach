@@ -188,13 +188,15 @@ function App() {
                 </div>
 
                 {/* Hidden shame card (for export) */}
-                <div className="rounded-2xl overflow-hidden border border-white/10 mb-4">
-                  <FinancialShameCard
-                    expenses={expenses}
-                    roast={roastResponse}
-                    weeklyTotal={weeklyTotal}
-                    cardRef={cardRef}
-                  />
+                <div className="rounded-2xl overflow-hidden border border-white/10 mb-4 h-[320px] flex items-center justify-center bg-black/50 relative">
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.5] origin-center">
+                    <FinancialShameCard
+                      expenses={expenses}
+                      roast={roastResponse}
+                      weeklyTotal={weeklyTotal}
+                      cardRef={cardRef}
+                    />
+                  </div>
                 </div>
 
                 {/* Actions */}

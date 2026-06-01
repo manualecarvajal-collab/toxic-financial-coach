@@ -36,8 +36,7 @@ export default function ExpenseForm({ onAddExpense }: Props) {
   };
 
   return (
-    <motion.div
-      layout
+    <div
       className="fixed bottom-24 right-6 z-50"
     >
       {isExpanded ? (
@@ -119,6 +118,6 @@ export default function ExpenseForm({ onAddExpense }: Props) {
           <Plus size={28} className="text-black" />
         </motion.button>
       )}
-    </motion.div>
+    </div>
   );
 }
