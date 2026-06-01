@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Esta función corre en el edge de Vercel - la API Key NUNCA toca el cliente
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+// La API Key de Gemini se configura en Vercel
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 interface ExpensePayload {
   expenses: {
@@ -19,18 +19,18 @@ const SYSTEM_PROMPT = `Eres "Toxic Financial Coach", un entrenador financiero ex
 Tu misión: Analizar los gastos semanales del usuario y generar una crítica hiriente pero constructiva.
 
 REGLAS DE TONO:
-- Usa un lenguaje sarcástico y punzante (en español latino).
+- Usa un lenguaje sarcástico y punzante (en español de Latinoamérica).
 - Señala patrones de gasto ridículos.
-- Compara sus gastos con cosas absurdas (ej: "Podrías haber comprado 3 Bitcoin en 2010").
+- Compara sus gastos con cosas absurdas (ej: "Con eso pagabas el internet de todo el vecindario").
 - Incluye al menos 1 sugerencia sarcástica pero útil.
-- Máximo 3 párrafos.
-- NO seas grosero sin razón - el insulto debe venir de los datos reales.
+- Máximo 3 párrafos cortos.
+- NO seas grosero sin razón - el insulto debe venir de la mala gestión del dinero.
 
-RESPONDE EN JSON:
+IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON válido con esta estructura:
 {
   "roast": "El texto del roast aquí...",
-  "toxicGrade": "D" ("A"=legendario malgastador, "F"=tiene esperanza),
-  "uselessFact": "Un dato absurdo relacionado (ej: Eso son 47 tacos de pastor)"
+  "toxicGrade": "D" (Usa letras de A a F, donde A es gastador legendario y F es alguien que aún tiene esperanza),
+  "uselessFact": "Un dato absurdo (ej: Eso equivale a 47 cafés que no necesitabas)"
 }`;
 
 export default async function handler(
@@ -41,56 +41,60 @@ export default async function handler(
     return res.status(405).json({ error: 'Solo POST, campeón' });
   }
 
-  if (!OPENAI_API_KEY) {
+  if (!GEMINI_API_KEY) {
     return res.status(500).json({
-      roast: '⚠️ No configuraste la API Key. Tu wallet está a salvo... por ahora.',
+      roast: '⚠️ No configuraste la GEMINI_API_KEY. Tu dinero está a salvo... de momento.',
       toxicGrade: '?',
-      uselessFact: 'El coach necesita su dosis de OpenAI'
+      uselessFact: 'El coach necesita su dosis de Google Gemini'
     });
   }
 
   const payload: ExpensePayload = req.body;
+  const userContent = `Aquí están mis gastos de la semana (${payload.weekRange}):\n\n${JSON.stringify(payload.expenses, null, 2)}\n\nTotal gastado: $${payload.totalSpent}\n\nDestrúyeme financieramente.`;
 
   try {
-    const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    
+    const geminiRes = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${OPENAI_API_KEY}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user', content: `Aquí están mis gastos de la semana (${payload.weekRange}):\n\n${JSON.stringify(payload.expenses, null, 2)}\n\nTotal gastado: $${payload.totalSpent}\n\nDestrúyeme financieramente.` }
+        contents: [
+          {
+            parts: [
+              { text: `${SYSTEM_PROMPT}\n\nUsuario: ${userContent}` }
+            ]
+          }
         ],
-        temperature: 0.9,
-        max_tokens: 500
+        generationConfig: {
+          temperature: 0.9,
+          topK: 1,
+          topP: 1,
+          maxOutputTokens: 1000,
+          responseMimeType: "application/json" // Forzamos respuesta JSON
+        }
       })
     });
 
-    const data = await openaiRes.json();
+    const data = await geminiRes.json();
     
-    if (!data.choices?.[0]?.message?.content) {
-      throw new Error('OpenAI no respondió como esperaba');
+    if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      console.error('Respuesta inesperada de Gemini:', JSON.stringify(data));
+      throw new Error('Gemini no respondió como esperaba');
     }
 
-    // Intentar parsear el JSON de la respuesta
-    const content = data.choices[0].message.content;
-    const jsonMatch = content.match(/\{[\s\S]*\}/);
-    const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : {
-      roast: content,
-      toxicGrade: 'C',
-      uselessFact: '🤷'
-    };
+    const content = data.candidates[0].content.parts[0].text;
+    const parsed = JSON.parse(content);
 
     return res.status(200).json(parsed);
   } catch (error) {
-    console.error('Error llamando a OpenAI:', error);
+    console.error('Error llamando a Gemini:', error);
     return res.status(200).json({
-      roast: '💀 Incluso la IA se quedó sin palabras ante tu nivel de gasto. (Error temporal, intenta de nuevo)',
+      roast: '💀 Incluso la IA de Google se quedó en shock con tu irresponsabilidad. (Error técnico, intenta de nuevo)',
       toxicGrade: 'ERR',
-      uselessFact: 'La IA colapsó procesando tu irresponsabilidad financiera'
+      uselessFact: 'Gemini colapsó procesando tu desastre financiero'
     });
   }
 }
