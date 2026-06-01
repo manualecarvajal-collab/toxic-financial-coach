@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Plus, Send } from 'lucide-react';
 import { EXPENSE_CATEGORIES } from '../types';
 import type { Expense } from '../types';
@@ -40,12 +39,9 @@ export default function ExpenseForm({ onAddExpense }: Props) {
       className="fixed bottom-24 right-6 z-50"
     >
       {isExpanded ? (
-        <motion.form
-          initial={{ opacity: 0, scale: 0.8, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.8, y: 20 }}
+        <form
           onSubmit={handleSubmit}
-          className="bg-toxic-gray border border-white/10 rounded-2xl p-5 w-72 shadow-2xl shadow-black/50"
+          className="bg-toxic-gray border border-white/10 rounded-2xl p-5 w-72 shadow-2xl shadow-black/50 transition-all duration-300"
         >
           <h3 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-4">
             Nuevo Gasto
@@ -107,16 +103,14 @@ export default function ExpenseForm({ onAddExpense }: Props) {
               </button>
             </div>
           </div>
-        </motion.form>
+        </form>
       ) : (
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.9 }}
+        <button
           onClick={() => setIsExpanded(true)}
-          className="w-14 h-14 bg-toxic-green rounded-full flex items-center justify-center shadow-lg shadow-toxic-green/20 hover:shadow-toxic-green/40 transition-shadow"
+          className="w-14 h-14 bg-toxic-green rounded-full flex items-center justify-center shadow-lg shadow-toxic-green/20 hover:shadow-toxic-green/40 hover:scale-105 active:scale-95 transition-all duration-200"
         >
           <Plus size={28} className="text-black" />
-        </motion.button>
+        </button>
       )}
     </div>
   );

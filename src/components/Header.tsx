@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Flame, Sparkles, Trash2 } from 'lucide-react';
 
 interface Props {
@@ -17,12 +16,9 @@ export default function Header({ onOpenRoast, onClearAll, expenseCount, weeklyTo
       <div className="flex items-center justify-between py-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <motion.div
-            whileHover={{ rotate: [0, -10, 10, 0] }}
-            transition={{ duration: 0.3 }}
-          >
+          <div className="hover:rotate-12 transition-transform duration-300">
             <Flame size={28} className="text-toxic-green" />
-          </motion.div>
+          </div>
           <div>
             <h1 className="text-lg font-black italic tracking-tighter">
               TOXIC <span className="text-toxic-green">COACH</span>
@@ -36,25 +32,21 @@ export default function Header({ onOpenRoast, onClearAll, expenseCount, weeklyTo
         {/* Actions */}
         <div className="flex items-center gap-2">
           {/* Roast Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={onOpenRoast}
-            className="flex items-center gap-2 px-4 py-2 bg-toxic-red/10 border border-toxic-red/20 rounded-xl text-xs font-bold text-toxic-red hover:bg-toxic-red/20 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-toxic-red/10 border border-toxic-red/20 rounded-xl text-xs font-bold text-toxic-red hover:bg-toxic-red/20 hover:scale-105 active:scale-95 transition-all duration-200"
           >
             <Sparkles size={14} />
             Roast
-          </motion.button>
+          </button>
 
           {/* Clear Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}
+          <button
             onClick={onClearAll}
-            className="p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-colors text-white/30 hover:text-toxic-red"
+            className="p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-all duration-200 text-white/30 hover:text-toxic-red hover:scale-105 active:scale-95"
           >
             <Trash2 size={16} />
-          </motion.button>
+          </button>
         </div>
       </div>
     </header>

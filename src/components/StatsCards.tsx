@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { TrendingDown, TrendingUp, Target, Wallet, AlertTriangle } from 'lucide-react';
 import { formatCurrency } from '../utils/format';
 
@@ -51,13 +50,10 @@ export default function StatsCards({ weeklyTotal, monthlyTotal, totalSpent, expe
 
   return (
     <div className="grid grid-cols-2 gap-3">
-      {stats.map((stat, index) => (
-        <motion.div
+      {stats.map((stat) => (
+        <div
           key={stat.label}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.05 }}
-          className={`${stat.bg} ${stat.border} border rounded-xl p-4`}
+          className={`${stat.bg} ${stat.border} border rounded-xl p-4 hover:border-white/20 transition-all duration-200`}
         >
           <div className="flex items-center justify-between mb-3">
             <span className="text-[10px] uppercase tracking-widest text-white/40 font-mono">
@@ -71,7 +67,7 @@ export default function StatsCards({ weeklyTotal, monthlyTotal, totalSpent, expe
           <p className="text-[9px] text-white/20 mt-1 italic">
             {stat.comment}
           </p>
-        </motion.div>
+        </div>
       ))}
     </div>
   );
