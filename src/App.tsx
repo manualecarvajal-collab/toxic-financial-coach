@@ -73,7 +73,7 @@ function App() {
   }, [confirmClear, clearAllExpenses]);
 
   return (
-    <div className="min-h-screen bg-toxic-black text-white font-brutal">
+    <div className="min-h-[100dvh] bg-toxic-black text-white font-brutal">
       <div className="max-w-lg mx-auto px-4 pb-32">
         {/* Header */}
         <Header

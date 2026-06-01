@@ -91,7 +91,7 @@ export default async function handler(
     return res.status(200).json(parsed);
   } catch (error) {
     console.error('Error llamando a Gemini:', error);
-    return res.status(200).json({
+    return res.status(500).json({
       roast: '💀 Incluso la IA de Google se quedó en shock con tu irresponsabilidad. (Error técnico, intenta de nuevo)',
       toxicGrade: 'ERR',
       uselessFact: 'Gemini colapsó procesando tu desastre financiero'

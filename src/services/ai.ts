@@ -17,6 +17,30 @@ interface RoastPayload {
   weekRange: string;
 }
 
+// Respuestas cuando no hay gastos esta semana
+const EMPTY_ROASTS: RoastResponse[] = [
+  {
+    roast: "¿Gastos? No tienes gastos. ¿Eres un monje budista o solo estás muerto financieramente? Sal a gastar, cobarde.",
+    toxicGrade: "A",
+    uselessFact: "Tu wallet está más intacta que tu vida social."
+  },
+  {
+    roast: "Cero gastos. Qué aburrido. El dinero está para gastarlo, no para mirarlo. Anda, date un gusto antes de que la inflación te lo robe.",
+    toxicGrade: "A+",
+    uselessFact: "Dicen que el que no gasta, no vive. Tú debes ser inmortal entonces."
+  },
+  {
+    roast: "Ni un solo gasto esta semana. ¿Estás ahorrando para algo importante o solo eres pobre? Porque una cosa es ser responsable y otra muy distinta es no tener vida.",
+    toxicGrade: "B",
+    uselessFact: "Podrías haber gastado al menos en un café. Pero no. Nada. 0. Vacío existencial."
+  },
+  {
+    roast: "Semana sin gastos. Felicidades, supongo. Pero oye, la felicidad no se ahorra. Si no gastas, ¿qué sentido tiene ganar dinero? Medita sobre eso.",
+    toxicGrade: "A-",
+    uselessFact: "La gente que no gasta vive 3 años más. Pero se sienten como 30."
+  }
+];
+
 // Insultos pre-generados para modo offline / demo
 const MOCK_ROASTS: RoastResponse[] = [
   {
@@ -79,16 +103,23 @@ function buildPayload(expenses: Expense[]): RoastPayload {
 }
 
 /**
+ * Obtiene un elemento aleatorio de un array
+ */
+function getRandomItem<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+/**
  * Obtiene un roast aleatorio de los mock (para desarrollo offline)
  */
 function getMockRoast(expenses: Expense[]): RoastResponse {
   const payload = buildPayload(expenses);
-  const mock = MOCK_ROASTS[Math.floor(Math.random() * MOCK_ROASTS.length)];
+  const mock = getRandomItem(MOCK_ROASTS);
 
   return {
     roast: mock.roast
-      .replace('${total}', `$${payload.totalSpent.toFixed(2)}`)
-      .replace('${count}', payload.expenses.length.toString()),
+      .replaceAll('${total}', `$${payload.totalSpent.toFixed(2)}`)
+      .replaceAll('${count}', payload.expenses.length.toString()),
     toxicGrade: mock.toxicGrade,
     uselessFact: mock.uselessFact
   };
@@ -102,11 +133,7 @@ export async function getRoast(expenses: Expense[]): Promise<RoastResponse> {
   const payload = buildPayload(expenses);
 
   if (payload.expenses.length === 0) {
-    return {
-      roast: "¿Gastos? No tienes gastos. ¿Eres un monje budista o solo estás muerto financieramente? Sal a gastar, cobarde.",
-      toxicGrade: "A",
-      uselessFact: "Tu wallet está más intacta que tu vida social."
-    };
+    return getRandomItem(EMPTY_ROASTS);
   }
 
   try {
