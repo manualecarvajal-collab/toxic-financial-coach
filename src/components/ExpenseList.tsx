@@ -26,19 +26,15 @@ export default function ExpenseList({ expenses, onDeleteExpense, loading }: Prop
 
   if (expenses.length === 0) {
     return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="text-center py-16"
-      >
-        <TrendingUp className="mx-auto text-white/10 mb-4" size={48} />
-        <p className="text-white/30 text-sm font-bold">
+      <div className="text-center py-16">
+        <TrendingUp className="mx-auto text-white/20 mb-4" size={48} />
+        <p className="text-white/40 text-sm font-bold">
           Sin gastos aún. ¿Eres pobre o responsable?
         </p>
-        <p className="text-white/10 text-xs mt-2">
+        <p className="text-white/20 text-xs mt-2">
           Tocá el botón verde para registrar tu primera mala decisión
         </p>
-      </motion.div>
+      </div>
     );
   }
 
