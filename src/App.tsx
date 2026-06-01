@@ -166,7 +166,7 @@ function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowShameCard(false)}
-              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-40"
+              className="fixed inset-0 bg-black/95 z-40"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}

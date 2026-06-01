@@ -8,22 +8,17 @@
 
   --font-family-brutal: "Inter", system-ui, sans-serif;
   --font-family-mono: "JetBrains Mono", monospace;
-
-  --animate-glitch: glitch 0.3s cubic-bezier(.25,.46,.45,.94) both infinite;
-}
-
-@keyframes glitch {
-  0% { transform: translate(0) }
-  20% { transform: translate(-2px, 2px) }
-  40% { transform: translate(-2px, -2px) }
-  60% { transform: translate(2px, 2px) }
-  80% { transform: translate(2px, -2px) }
-  100% { transform: translate(0) }
 }
 
 :root {
   background-color: #050505;
   color: #ffffff;
+}
+
+html {
+  /* Forzar composición GPU estable en móviles */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 body {
