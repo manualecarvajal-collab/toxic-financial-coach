@@ -1,30 +1,33 @@
 # Cerebro - Toxic Financial Coach 🧠
 
 ## Estado del Proyecto
-- **Fase Actual**: 4 — Personaje 3D + TTS (Voz y Animación)
-- **Tecnologías**: React, Vite, TS, Tailwind v4, Dexie.js, Three.js (R3F/Drei).
-- **Arquitectura**: Client-side (IndexedDB) + Vercel Edge Proxy.
+- **Fase Actual**: 5 — MVP + APK Android
+- **Tecnologías**: React, Vite, TS, Tailwind v4, Dexie.js, Capacitor Android.
+- **Arquitectura**: Client-side (IndexedDB) + Vercel Edge Proxy + APK (Capacitor WebView).
 - **IA**: Google Gemini 2.5 Flash Lite + Google Cloud Text-to-Speech.
-- **Personaje**: GLB 3D (indio en kurta, Mixamo rig) renderizado con Three.js.
+- **Voz**: `es-US-Wavenet-B` (masculino mexicano, vía Google Cloud TTS).
+- **Bundle**: ~343 KB (sin Three.js) + APK ~12 MB.
 - **GitHub**: https://github.com/manualecarvajal-collab/toxic-financial-coach
 
 ## Hitos Logrados
 - [x] Motor Gemini 2.5 Flash Lite integrado en Vercel Edge.
 - [x] Base de datos local con Dexie.js.
-- [x] Social Shame Card operativa.
+- [x] Social Shame Card operativa (descargable/compartible).
 - [x] Build de producción verificada.
-- [x] Rediseño brutalista completo (scanlines, noise, Anton, border-8, bottom nav).
+- [x] Rediseño brutalista completo (scanlines, noise, Anton, border-8).
 - [x] Full-screen expense form con bento grid de categorías.
 - [x] Sistema de comentarios inteligentes (24+ variantes por categoría/monto).
-- [x] Bottom navigation con 4 tabs (DEUDA/GASTOS/BURLA/INTEL).
 - [x] Flicker fix para Tecno Spark 20 / MediaTek.
 - [x] Mock roasts con replaceAll + 4 variantes de empty state.
 - [x] Burla automática al agregar gasto (sin botón manual).
 - [x] Prompt engineering: 4 personalidades dinámicas + few-shot + temperatura 0.85.
-- [x] Personaje 3D animado en modal de burla (Three.js + Center + useAnimations).
-- [x] TTS con voz masculina Hindi (Google Cloud TTS `hi-IN-Standard-B`).
-- [x] Fallback automático a Web Speech API si falta TTS_API_KEY.
-- [x] Orquestación: roast → animación → TTS → transición de estados.
+- [x] TTS con Google Cloud (`es-US-Wavenet-B`, voz mexicana masculina).
+- [x] Fallback a Web Speech API si falta TTS_API_KEY.
+- [x] Proxy `api/speak.ts` en Vercel para Google Cloud TTS.
+- [x] Eliminación de personaje 3D (modelo sin jaw bone, no daba calidad).
+- [x] Eliminación de bottom navigation (bloqueaba FAB).
+- [x] Capacitor Android instalado y configurado (`com.toxicfinancial.coach`).
+- [x] APK debug generado y funcional (`app-debug.apk` ~12 MB).
 
 ## Próximos Pasos (En Vercel)
 1. Importar el repositorio en Vercel.
