@@ -92,10 +92,10 @@ function App() {
         {/* Hero Status */}
         <section className="bg-toxic-dark-alt border-4 border-error p-stack-md relative overflow-hidden scanline">
           <h2 className="font-display text-headline-lg-mobile md:text-display-xl text-error mb-2 uppercase">
-            You're Broke
+            Estás en Quiebra
           </h2>
           <p className="font-data text-label-mono text-on-surface-variant uppercase tracking-widest">
-            SYSTEM WARNING: Financial ruin imminent. Stop buying coffee.
+            ALERTA DEL SISTEMA: Ruina financiera inminente. Deja de comprar café.
           </p>
         </section>
 
@@ -110,7 +110,7 @@ function App() {
         {activeTab === 'debt' && (
           <section>
             <h3 className="font-display text-headline-lg-mobile md:text-headline-lg text-primary-container mb-stack-md uppercase glitch">
-              Recent Disasters
+              Desastres Recientes
             </h3>
             <ExpenseList
               expenses={expenses}
@@ -124,10 +124,10 @@ function App() {
           <section className="text-center py-16">
             <Receipt className="mx-auto text-white/20 mb-4" size={64} />
             <p className="text-on-surface-variant text-lg font-black uppercase">
-              Waste Analysis
+              Análisis de Derroche
             </p>
             <p className="text-white/20 text-xs mt-2">
-              Detailed breakdown coming soon.
+              Desglose detallado próximamente.
             </p>
           </section>
         )}
@@ -136,13 +136,13 @@ function App() {
           <section className="text-center py-16">
             <MessageCircleWarning className="mx-auto text-toxic-red mb-4" size={64} />
             <p className="text-on-surface-variant text-lg font-black uppercase">
-              Get Roasted
+              Que te Burlén
             </p>
             <button
               onClick={handleOpenRoast}
               className="mt-4 px-8 py-4 bg-error/20 border-4 border-error/30 rounded-none text-error font-black uppercase tracking-widest hover:bg-error/30 transition-all active:scale-95"
             >
-              Generate Roast
+              Generar Burla
             </button>
           </section>
         )}
@@ -151,10 +151,10 @@ function App() {
           <section className="text-center py-16">
             <Monitor className="mx-auto text-toxic-purple mb-4" size={64} />
             <p className="text-on-surface-variant text-lg font-black uppercase">
-              Intel & Insights
+              Inteligencia Financiera
             </p>
             <p className="text-white/20 text-xs mt-2">
-              AI-powered financial analysis coming soon.
+              Análisis financiero con IA próximamente.
             </p>
           </section>
         )}
@@ -168,21 +168,21 @@ function App() {
         <div className="flex justify-around items-stretch h-20 bg-toxic-black">
           <TabButton
             icon={Wallet}
-            label="DEBT"
+            label="DEUDA"
             active={activeTab === 'debt'}
             onClick={() => setActiveTab('debt')}
             activeColor="bg-primary-container text-toxic-black"
           />
           <TabButton
             icon={Receipt}
-            label="WASTE"
+            label="GASTOS"
             active={activeTab === 'waste'}
             onClick={() => setActiveTab('waste')}
             activeColor="text-toxic-orange"
           />
           <TabButton
             icon={MessageCircleWarning}
-            label="ROAST"
+            label="BURLA"
             active={activeTab === 'roast'}
             onClick={() => setActiveTab('roast')}
             activeColor="text-toxic-red"

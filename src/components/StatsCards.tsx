@@ -9,32 +9,32 @@ interface Props {
 export default function StatsCards({ weeklyTotal, totalSpent, expenseCount }: Props) {
   const stats = [
     {
-      label: 'Total Bleed',
+      label: 'Gasto Semanal',
       value: formatCurrency(weeklyTotal),
       borderColor: 'border-error',
       textColor: 'text-error',
-      comment: weeklyTotal > 1000 ? 'OUT OF CONTROL' : weeklyTotal > 500 ? 'WORRYING' : weeklyTotal > 0 ? 'MODERATE' : 'UNTOUCHABLE'
+      comment: weeklyTotal > 1000 ? 'FUERA DE CONTROL' : weeklyTotal > 500 ? 'PREOCUPANTE' : weeklyTotal > 0 ? 'MODERADO' : 'INTOCABLE'
     },
     {
-      label: 'Waste Lvl',
-      value: weeklyTotal > 1000 ? 'CRITICAL' : weeklyTotal > 500 ? 'HIGH' : weeklyTotal > 0 ? 'MEDIUM' : 'LOW',
+      label: 'Nivel de Derroche',
+      value: weeklyTotal > 1000 ? 'CRÍTICO' : weeklyTotal > 500 ? 'ALTO' : weeklyTotal > 0 ? 'MEDIO' : 'BAJO',
       borderColor: 'border-toxic-orange',
       textColor: 'text-toxic-orange',
-      comment: expenseCount > 20 ? 'ADDICT' : expenseCount > 10 ? 'ACTIVE' : 'SELECTIVE'
+      comment: expenseCount > 20 ? 'ADICTO' : expenseCount > 10 ? 'ACTIVO' : 'SELECTIVO'
     },
     {
-      label: 'Coach Mood',
-      value: weeklyTotal > 1000 ? 'FURIOUS' : weeklyTotal > 500 ? 'ANGRY' : weeklyTotal > 0 ? 'DISAPPOINTED' : 'SLEEPING',
+      label: 'Humor del Coach',
+      value: weeklyTotal > 1000 ? 'FURIOSO' : weeklyTotal > 500 ? 'ENOJADO' : weeklyTotal > 0 ? 'DECEPCIONADO' : 'DURMIENDO',
       borderColor: 'border-toxic-yellow',
       textColor: 'text-toxic-yellow',
-      comment: weeklyTotal > 0 ? 'You should be worried' : 'For now...'
+      comment: weeklyTotal > 0 ? 'Deberías preocuparte' : 'Por ahora...'
     },
     {
-      label: 'Remaining',
+      label: 'Restante',
       value: formatCurrency(Math.max(0, 5000 - totalSpent)),
       borderColor: 'border-primary-container',
       textColor: 'text-primary-container',
-      comment: totalSpent > 5000 ? 'NEGATIVE. IMPRESSIVE.' : 'Still have time to waste it'
+      comment: totalSpent > 5000 ? 'NEGATIVO. IMPRESIONANTE.' : 'Todavía puedes derrochar más'
     }
   ];
 
