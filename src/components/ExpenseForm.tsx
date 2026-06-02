@@ -19,7 +19,7 @@ export default function ExpenseForm({ onAddExpense }: Props) {
     if (!amount || parseFloat(amount) <= 0) return;
 
     setIsSubmitting(true);
-    
+
     await onAddExpense({
       amount: parseFloat(amount),
       description: description.trim() || 'Gasto no especificado',
@@ -35,15 +35,13 @@ export default function ExpenseForm({ onAddExpense }: Props) {
   };
 
   return (
-    <div
-      className="fixed bottom-24 right-6 z-50"
-    >
+    <div className="fixed bottom-24 right-6 z-50">
       {isExpanded ? (
         <form
           onSubmit={handleSubmit}
-          className="bg-toxic-gray border border-white/10 rounded-2xl p-5 w-72 shadow-2xl shadow-black/50 transition-all duration-300"
+          className="bg-surface-container-high border-2 border-primary-container/40 rounded-xl p-5 w-72 shadow-2xl shadow-black/50"
         >
-          <h3 className="text-xs font-bold uppercase tracking-widest text-white/60 mb-4">
+          <h3 className="font-data text-label-mono text-primary-container uppercase mb-4 tracking-widest">
             Nuevo Gasto
           </h3>
 
@@ -56,7 +54,7 @@ export default function ExpenseForm({ onAddExpense }: Props) {
               step="0.01"
               min="0"
               autoFocus
-              className="w-full bg-black/50 text-2xl font-black font-mono text-toxic-green outline-none p-3 rounded-xl border border-white/5 focus:border-toxic-green/50 transition-colors placeholder:text-white/10"
+              className="w-full bg-toxic-black/80 text-3xl font-black font-data text-primary-container outline-none p-3 rounded-xl border-2 border-white/10 focus:border-primary-container/50 transition-colors placeholder:text-white/10"
             />
 
             <input
@@ -64,13 +62,13 @@ export default function ExpenseForm({ onAddExpense }: Props) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="¿En qué lo gastaste?"
-              className="w-full bg-black/50 text-sm outline-none p-3 rounded-xl border border-white/5 focus:border-white/20 transition-colors placeholder:text-white/20"
+              className="w-full bg-toxic-black/80 text-sm outline-none p-3 rounded-xl border-2 border-white/10 focus:border-white/20 transition-colors placeholder:text-white/20"
             />
 
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as typeof category)}
-              className="w-full bg-black/50 text-sm outline-none p-3 rounded-xl border border-white/5 focus:border-white/20 transition-colors text-white/80"
+              className="w-full bg-toxic-black/80 text-sm outline-none p-3 rounded-xl border-2 border-white/10 focus:border-white/20 transition-colors text-white/80"
             >
               {EXPENSE_CATEGORIES.map((cat) => (
                 <option key={cat} value={cat} className="bg-toxic-gray">
@@ -83,14 +81,14 @@ export default function ExpenseForm({ onAddExpense }: Props) {
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="flex-1 py-3 rounded-xl text-sm font-bold text-white/40 bg-white/5 hover:bg-white/10 transition-colors"
+                className="flex-1 py-3 rounded-xl text-sm font-bold text-white/40 bg-white/5 hover:bg-white/10 transition-colors border-2 border-white/10"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={!amount || isSubmitting}
-                className="flex-1 py-3 rounded-xl text-sm font-bold bg-toxic-green text-black flex items-center justify-center gap-2 hover:bg-toxic-green/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed active:scale-95"
+                className="flex-1 py-3 rounded-xl text-sm font-bold bg-primary-container text-toxic-black flex items-center justify-center gap-2 hover:bg-primary-container/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <span className="animate-pulse">...</span>
@@ -107,9 +105,9 @@ export default function ExpenseForm({ onAddExpense }: Props) {
       ) : (
         <button
           onClick={() => setIsExpanded(true)}
-          className="w-14 h-14 bg-toxic-green rounded-full flex items-center justify-center shadow-lg shadow-toxic-green/20 hover:shadow-toxic-green/40 hover:scale-105 active:scale-95 transition-all duration-200"
+          className="w-16 h-16 bg-primary-container rounded-full flex items-center justify-center shadow-lg shadow-primary-container/30 hover:shadow-primary-container/50 hover:scale-105 active:scale-95 transition-all duration-200 fab-pulse"
         >
-          <Plus size={28} className="text-black" />
+          <Plus size={32} className="text-toxic-black" />
         </button>
       )}
     </div>

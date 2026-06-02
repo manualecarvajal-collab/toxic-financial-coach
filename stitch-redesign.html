@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=Anton&amp;family=JetBrains+Mono:wght@700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary": "#ffb4ab",
+                      "primary-container": "#39ff14",
+                      "inverse-surface": "#dae6d0",
+                      "on-error": "#690005",
+                      "toxic-yellow": "#FBBF24",
+                      "secondary-fixed": "#ffdad6",
+                      "tertiary-fixed": "#ffdad6",
+                      "on-primary-fixed-variant": "#095300",
+                      "on-secondary-fixed-variant": "#93000c",
+                      "surface-container": "#182214",
+                      "on-secondary": "#690006",
+                      "secondary-fixed-dim": "#ffb4ab",
+                      "surface-variant": "#2d3828",
+                      "toxic-black": "#050505",
+                      "surface-container-lowest": "#071105",
+                      "tertiary-container": "#ffd3ce",
+                      "surface-container-low": "#141e11",
+                      "on-primary-fixed": "#022100",
+                      "toxic-dark-alt": "#1A1A2E",
+                      "surface": "#0c1609",
+                      "outline-variant": "#3c4b35",
+                      "on-tertiary-fixed-variant": "#5d3f3c",
+                      "on-primary-container": "#107100",
+                      "primary-fixed-dim": "#2ae500",
+                      "inverse-primary": "#106e00",
+                      "tertiary": "#fff8f7",
+                      "toxic-orange": "#FF6B35",
+                      "on-tertiary-fixed": "#2c1513",
+                      "background": "#0c1609",
+                      "secondary-container": "#d30017",
+                      "on-secondary-container": "#ffe2de",
+                      "error-container": "#93000a",
+                      "toxic-gray": "#2A2A2A",
+                      "on-surface": "#dae6d0",
+                      "surface-container-highest": "#2d3828",
+                      "toxic-purple": "#8B5CF6",
+                      "primary": "#efffe3",
+                      "on-tertiary": "#442927",
+                      "surface-bright": "#323c2d",
+                      "surface-tint": "#2ae500",
+                      "on-surface-variant": "#baccb0",
+                      "error": "#ffb4ab",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-high": "#222d1e",
+                      "on-tertiary-container": "#7a5955",
+                      "primary-fixed": "#79ff5b",
+                      "tertiary-fixed-dim": "#e7bdb8",
+                      "on-primary": "#053900",
+                      "surface-dim": "#0c1609",
+                      "outline": "#85967c",
+                      "on-secondary-fixed": "#410002",
+                      "inverse-on-surface": "#293324",
+                      "on-background": "#dae6d0"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-lg": "24px",
+                      "stack-xs": "4px",
+                      "border-bold": "4px",
+                      "grid-gutter": "12px",
+                      "border-thin": "2px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "safe-margin": "12px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "display-xl": ["Anton"],
+                      "data-heavy": ["JetBrains Mono"],
+                      "headline-lg-mobile": ["Anton"],
+                      "headline-lg": ["Anton"],
+                      "label-mono": ["JetBrains Mono"],
+                      "display-lg": ["Anton"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["16px", {"lineHeight": "22px", "fontWeight": "700"}],
+                      "display-xl": ["96px", {"lineHeight": "90px", "letterSpacing": "-0.04em", "fontWeight": "900"}],
+                      "data-heavy": ["28px", {"lineHeight": "32px", "fontWeight": "800"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["40px", {"lineHeight": "44px", "fontWeight": "400"}],
+                      "label-mono": ["13px", {"lineHeight": "18px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "display-lg": ["36px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "900"}],
+                      "body-lg": ["18px", {"lineHeight": "24px", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>.scanline::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 10;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none
+    }
+.diagonal-pattern {
+    background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.03) 10px, rgba(255, 255, 255, 0.03) 20px)
+    }
+.noise-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuDx4YC6r2_U4I8cPcQikEnBjiNO61iAKy9kNNbLOWDo49snlVcUYhlaSshkzCvlkT9wlLcdI5tJqG8aa_amyJNDzHrsEJvpuCJFuS-Zx7GVteBNjTJ2ZEkOJrSL656b2OrjRMx9NoT_NEqxwRX2KPh8q5v14tOzuPUUXKKECD_Gzx4WOyRMaG2aeL4IVJVKCoMgrZyeOHfR9vve2Bc7Z_PcKrlHHI_MiVpRzYJV2QpD8VGRij3QQxNt6GkXDPwbY-jNnZ4JQFKPtg);
+    background-repeat: repeat
+    }
+
+    .truncate-heading {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 md:pb-0 noise-bg">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky bg-background dark:bg-background border-b-border-bold border-primary-container bg-[url('https://grainy-gradients.vercel.app/noise.svg')] z-50">
+<div class="flex items-center justify-between px-safe-margin py-stack-sm w-full relative overflow-hidden before:absolute before:inset-0 before:bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] before:bg-[length:100%_2px,3px_100%] before:pointer-events-none">
+<button class="text-primary dark:text-primary shrink-0 transition-all duration-75 active:skew-x-2 hover:bg-primary-container hover:text-toxic-black p-2">
+<span class="material-symbols-outlined">terminal</span>
+</button>
+<h1 class="font-display-lg text-display-lg text-toxic-yellow uppercase tracking-tighter truncate-heading mx-2">ESTADO DE POBREZA</h1>
+<button class="text-primary dark:text-primary shrink-0 transition-all duration-75 active:skew-x-2 hover:bg-primary-container hover:text-toxic-black p-2">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<main class="px-safe-margin pt-stack-lg max-w-4xl mx-auto space-y-stack-lg">
+<!-- Hero Status -->
+<section class="bg-toxic-dark-alt border-border-bold border-error p-stack-md relative overflow-hidden scanline">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-display-xl md:text-display-xl text-error mb-2 uppercase">You're Broke</h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase">SYSTEM WARNING: Financial ruin imminent. Stop buying coffee.</p>
+</section>
+<!-- 2x2 Grid StatCards -->
+<section class="grid grid-cols-2 gap-grid-gutter">
+<!-- Total Spent -->
+<div class="bg-toxic-gray diagonal-pattern border-l-[8px] border-error p-stack-md">
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase mb-2">Total Bleed</p>
+<p class="font-data-heavy text-data-heavy text-error break-all">-$4,206.90</p>
+</div>
+<!-- Waste Level -->
+<div class="bg-toxic-gray diagonal-pattern border-l-[8px] border-toxic-orange p-stack-md">
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase mb-2">Waste Lvl</p>
+<p class="font-data-heavy text-data-heavy text-toxic-orange">CRITICAL</p>
+</div>
+<!-- Coach Mood -->
+<div class="bg-toxic-gray diagonal-pattern border-l-[8px] border-toxic-yellow p-stack-md">
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase mb-2">Coach Mood</p>
+<p class="font-data-heavy text-data-heavy text-toxic-yellow">ANGRY</p>
+</div>
+<!-- Remaining -->
+<div class="bg-toxic-gray diagonal-pattern border-l-[8px] border-primary-container p-stack-md">
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase mb-2">Remaining</p>
+<p class="font-data-heavy text-data-heavy text-primary-container">$12.50</p>
+</div>
+</section>
+<!-- Expenses List -->
+<section>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary-container mb-stack-md uppercase">Recent Disasters</h3>
+<div class="space-y-stack-sm">
+<!-- Item 1 -->
+<div class="bg-surface-variant border-l-border-bold border-error p-stack-sm flex justify-between items-center gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md text-on-surface uppercase truncate">Artisanal Toast</p>
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase truncate">Food &amp; Drink</p>
+</div>
+<p class="font-data-heavy text-data-heavy text-error shrink-0">-$24.00</p>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-variant border-l-border-bold border-toxic-orange p-stack-sm flex justify-between items-center gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md text-on-surface uppercase truncate">Useless App Sub</p>
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase truncate">Software</p>
+</div>
+<p class="font-data-heavy text-data-heavy text-toxic-orange shrink-0">-$19.99</p>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-variant border-l-border-bold border-primary-container p-stack-sm flex justify-between items-center gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md text-on-surface uppercase truncate">Found a penny</p>
+<p class="font-label-mono text-label-mono text-on-surface-variant uppercase truncate">Income</p>
+</div>
+<p class="font-data-heavy text-data-heavy text-primary-container shrink-0">+$0.01</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 border-t-border-bold border-primary-container bg-toxic-black md:hidden">
+<div class="fixed bottom-0 w-full flex justify-around items-stretch h-20 bg-toxic-black">
+<!-- DEBT (Active) -->
+<a class="flex flex-col items-center justify-center bg-primary-container text-toxic-black p-stack-xs rounded-none active:scale-95 transition-transform flex-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-mono text-label-mono mt-1">DEBT</span>
+</a>
+<!-- WASTE (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-xs hover:text-toxic-orange active:scale-95 transition-transform flex-1" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-label-mono text-label-mono mt-1">WASTE</span>
+</a>
+<!-- ROAST (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-xs hover:text-toxic-orange active:scale-95 transition-transform flex-1" href="#">
+<span class="material-symbols-outlined">mood_bad</span>
+<span class="font-label-mono text-label-mono mt-1">ROAST</span>
+</a>
+<!-- INTEL (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-stack-xs hover:text-toxic-orange active:scale-95 transition-transform flex-1" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-mono text-label-mono mt-1">INTEL</span>
+</a>
+</div>
+</nav>
+</body></html>

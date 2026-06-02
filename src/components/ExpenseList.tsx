@@ -1,5 +1,5 @@
 import { Trash2, TrendingUp } from 'lucide-react';
-import { formatCurrency, formatDate, getToxicityColor, getSarcasticComment } from '../utils/format';
+import { formatCurrency, formatDate, getToxicityColor } from '../utils/format';
 import { CATEGORY_EMOJIS } from '../types';
 import type { Expense } from '../types';
 
@@ -9,12 +9,19 @@ interface Props {
   loading?: boolean;
 }
 
+const BORDER_COLORS: Record<string, string> = {
+  'text-toxic-red': 'border-error',
+  'text-orange-500': 'border-toxic-orange',
+  'text-yellow-500': 'border-toxic-yellow',
+  'text-toxic-green': 'border-primary-container'
+};
+
 export default function ExpenseList({ expenses, onDeleteExpense, loading }: Props) {
   if (loading) {
     return (
-      <div className="space-y-3">
+      <div className="space-y-stack-sm">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="animate-pulse bg-toxic-gray/30 rounded-xl p-4">
+          <div key={i} className="animate-pulse bg-surface-variant rounded-none p-stack-sm" style={{ borderLeft: '8px solid #2d3828' }}>
             <div className="h-4 bg-white/5 rounded w-3/4 mb-2" />
             <div className="h-3 bg-white/5 rounded w-1/2" />
           </div>
@@ -26,9 +33,9 @@ export default function ExpenseList({ expenses, onDeleteExpense, loading }: Prop
   if (expenses.length === 0) {
     return (
       <div className="text-center py-16">
-        <TrendingUp className="mx-auto text-white/20 mb-4" size={48} />
-        <p className="text-white/40 text-sm font-bold">
-          Sin gastos aún. ¿Eres pobre o responsable?
+        <TrendingUp className="mx-auto text-white/20 mb-4" size={96} />
+        <p className="text-on-surface-variant text-2xl font-black uppercase">
+          Sin gastos aún
         </p>
         <p className="text-white/20 text-xs mt-2">
           Tocá el botón verde para registrar tu primera mala decisión
@@ -38,55 +45,49 @@ export default function ExpenseList({ expenses, onDeleteExpense, loading }: Prop
   }
 
   return (
-    <div className="space-y-2">
-      {expenses.map((expense) => (
-        <div
-          key={expense.id}
-          className="group relative bg-toxic-gray/30 hover:bg-toxic-gray/50 rounded-xl p-4 border border-white/5 hover:scale-[1.01] transition-all duration-200"
-        >
-          <div className="flex items-center gap-3">
-            {/* Emoji categoría */}
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-lg shrink-0">
-              {CATEGORY_EMOJIS[expense.category as keyof typeof CATEGORY_EMOJIS] || '❓'}
-            </div>
+    <div className="space-y-stack-sm">
+      {expenses.map((expense) => {
+        const toxicityClass = getToxicityColor(expense.amount);
+        const borderColor = BORDER_COLORS[toxicityClass] || 'border-error';
 
-            {/* Info */}
-            <div className="flex-1 min-w-0">
+        return (
+          <div
+            key={expense.id}
+            className={`bg-surface-variant border-l-8 ${borderColor} p-stack-sm flex justify-between items-center gap-2`}
+          >
+            <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-white/40">
-                  {CATEGORY_EMOJIS[expense.category as keyof typeof CATEGORY_EMOJIS] 
-                    ? '' 
-                    : expense.category}
+                <span className="text-2xl shrink-0">
+                  {CATEGORY_EMOJIS[expense.category as keyof typeof CATEGORY_EMOJIS] || '❓'}
                 </span>
+                <div>
+                  <p className="font-brutal text-body-md text-on-surface uppercase truncate">
+                    {expense.description}
+                  </p>
+                  <p className="font-data text-label-mono text-on-surface-variant uppercase truncate">
+                    {CATEGORY_EMOJIS[expense.category as keyof typeof CATEGORY_EMOJIS]
+                      ? expense.category
+                      : expense.category} · {formatDate(expense.date)}
+                  </p>
+                </div>
               </div>
-              <p className="text-sm font-bold truncate">{expense.description}</p>
-              <p className="text-[10px] text-white/30 font-mono">
-                {formatDate(expense.date)}
-              </p>
             </div>
-
-            {/* Amount & Delete */}
-            <div className="text-right shrink-0">
-              <p className={`font-mono font-black ${getToxicityColor(expense.amount)}`}>
+            <div className="text-right shrink-0 flex items-center gap-2">
+              <p className={`font-data text-data-heavy ${toxicityClass}`}>
                 -{formatCurrency(expense.amount)}
               </p>
-              <p className="text-[8px] text-white/20 italic">
-                {getSarcasticComment(expense.amount)}
-              </p>
+              {expense.id && (
+                <button
+                  onClick={() => onDeleteExpense(expense.id!)}
+                  className="w-6 h-6 bg-error rounded-full flex items-center justify-center hover:bg-error/80 transition-colors shrink-0"
+                >
+                  <Trash2 size={12} className="text-toxic-black" />
+                </button>
+              )}
             </div>
-
-            {/* Delete button (visible on hover) */}
-            {expense.id && (
-              <button
-                onClick={() => onDeleteExpense(expense.id!)}
-                className="absolute -right-2 -top-2 w-6 h-6 bg-toxic-red rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity active:scale-90"
-              >
-                <Trash2 size={12} className="text-white" />
-              </button>
-            )}
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
