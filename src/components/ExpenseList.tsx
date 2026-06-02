@@ -1,5 +1,5 @@
 import { Trash2, TrendingUp } from 'lucide-react';
-import { formatCurrency, formatDate, getToxicityColor } from '../utils/format';
+import { formatCurrency, formatDate, getToxicityColor, getSarcasticComment } from '../utils/format';
 import { CATEGORY_EMOJIS } from '../types';
 import type { Expense } from '../types';
 
@@ -72,18 +72,23 @@ export default function ExpenseList({ expenses, onDeleteExpense, loading }: Prop
                 </div>
               </div>
             </div>
-            <div className="text-right shrink-0 flex items-center gap-2">
-              <p className={`font-data text-data-heavy ${toxicityClass}`}>
-                -{formatCurrency(expense.amount)}
+            <div className="text-right shrink-0 flex flex-col items-end gap-1">
+              <div className="flex items-center gap-2">
+                <p className={`font-data text-data-heavy ${toxicityClass}`}>
+                  -{formatCurrency(expense.amount)}
+                </p>
+                {expense.id && (
+                  <button
+                    onClick={() => onDeleteExpense(expense.id!)}
+                    className="w-6 h-6 bg-error rounded-full flex items-center justify-center hover:bg-error/80 transition-colors shrink-0"
+                  >
+                    <Trash2 size={12} className="text-toxic-black" />
+                  </button>
+                )}
+              </div>
+              <p className="text-[9px] text-white/20 italic font-mono max-w-[180px] text-right leading-tight truncate">
+                {getSarcasticComment(expense.amount, expense.category, expense.description)}
               </p>
-              {expense.id && (
-                <button
-                  onClick={() => onDeleteExpense(expense.id!)}
-                  className="w-6 h-6 bg-error rounded-full flex items-center justify-center hover:bg-error/80 transition-colors shrink-0"
-                >
-                  <Trash2 size={12} className="text-toxic-black" />
-                </button>
-              )}
             </div>
           </div>
         );
