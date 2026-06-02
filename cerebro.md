@@ -12,6 +12,12 @@
 - [x] Base de datos local con Dexie.js.
 - [x] Social Shame Card operativa.
 - [x] Build de producción verificada.
+- [x] Rediseño brutalista completo (scanlines, noise, Anton, border-8, bottom nav).
+- [x] Full-screen expense form con bento grid de categorías.
+- [x] Sistema de comentarios inteligentes (24+ variantes por categoría/monto).
+- [x] Bottom navigation con 4 tabs (DEUDA/GASTOS/BURLA/INTEL).
+- [x] Flicker fix para Tecno Spark 20 / MediaTek.
+- [x] Mock roasts con replaceAll + 4 variantes de empty state.
 
 ## Próximos Pasos (En Vercel)
 1. Importar el repositorio en Vercel.
@@ -24,6 +30,62 @@
 ## Decisiones Técnicas Clave
 - **Gemini 1.5 Flash**: Elegido por su capa gratuita superior y velocidad de respuesta.
 - **JSON Mode**: Forzamos a Gemini a responder en formato JSON estructurado para mayor robustez.
+
+## Rediseño Brutalista (Junio 2026)
+
+### Problema
+El diseño original era funcional pero plano y sin personalidad. No reflejaba el tono sarcástico/agresivo de la app. El usuario reportó que se sentía "básico".
+
+### Solución
+Rediseño completo inspirado en **brutalismo digital** (Anton, bordes gruesos, scanlines, noise, tipografía extrema).
+
+### Cambios realizados
+
+**Fundación (`index.html`, `index.css`):**
+- Agregada Google Font `Anton` para títulos de alto impacto
+- `@theme` en Tailwind v4 expandido:
+  - +4 colores: `toxic-orange`, `toxic-purple`, `toxic-yellow`, `toxic-dark-alt`
+  - +5 familias fuentes: `font-display` (Anton), `font-data` (JetBrains Mono), etc.
+  - +7 tamaños de texto: `display-xl` (96px), `display-lg` (36px), `data-heavy` (28px), etc.
+  - +8 spacings: `safe-margin`, `stack-*`, `grid-gutter`, `border-bold/thin`
+  - Nuevas utilidades CSS: `.scanline` (CRT scanlines), `.diagonal-pattern`, `.noise-bg`, `.glitch:hover`, `.fab-pulse`, `.truncate-heading`
+
+**Componentes:**
+
+| Componente | Antes | Después |
+|------------|-------|---------|
+| `Header.tsx` | Flame icon, botón Roast/Clear | Scanlines, "ESTADO DE POBREZA" en Anton yellow, botón "Burla" rojo, Trash2 |
+| `StatsCards.tsx` | Cards redondeadas, iconos, hover:scale | `border-l-[8px]` coloreado, `diagonal-pattern`, data-heavy |
+| `ExpenseList.tsx` | Cards con hover:scale | `border-l-8` según toxicidad, `truncate`, sin hover (evita flicker) |
+| `ExpenseForm.tsx` | Popup small con inputs | **Pantalla completa**: noise+scanlines overlay, bento grid categorías, "CONFIRMAR GASTO ESTÚPIDO" |
+| `RoastModal.tsx` | Modal limpio | `noise-bg`, border-4 en grade badge, tipografía más agresiva |
+| `App.tsx` | Layout simple | **BottomNav** (DEUDA/GASTOS/BURLA/INTEL), Hero "Estás en Quiebra" scanline |
+| `format.ts` | `getSarcasticComment` con 6 frases estáticas | **Comentarios inteligentes**: 8 categorías + 5 tiers + selección aleatoria |
+
+**Flujo de navegación:**
+- DEUDA → lista de gastos (home)
+- GASTOS → análisis de derroche (placeholder)
+- BURLA → genera roast con IA
+- INTEL → inteligencia financiera (placeholder)
+- FAB (+) → pantalla completa de nuevo gasto
+
+### Archivos de diseño
+- `stitch-redesign.md` — Brief original para Stitch
+- `stitch-redesign.html` — Diseño de referencia generado por Stitch
+
+## Logros Técnicos
+
+### Sistema de comentarios inteligentes (`getSarcasticComment`)
+- **3 pools independientes** por categoría (8 categorías × 3 comentarios = 24)
+- **5 tiers** por monto (extreme/high/medium/low/free × ~5 cada uno = 24)
+- **Selección 50/50** entre comentario categorizado o genérico
+- **Cada visita/recarga** genera texto diferente (`Math.random()`)
+- Incluye el nombre del gasto y la categoría en el texto generado
+- Backwards compatible: acepta `(amount, category?, description?)`
+
+### StatsCards dinámicos
+- Cada card tiene arrays de 3 comentarios. Se elige 1 aleatorio cada render.
+- Ej: `WEEKLY_COMMENTS`, `WASTE_COMMENTS`, `MOOD_COMMENTS`, `REMAINING_COMMENTS`
 
 ## Bugs Conocidos
 
