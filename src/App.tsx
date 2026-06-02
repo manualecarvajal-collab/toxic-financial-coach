@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Wallet, Receipt, MessageCircleWarning, Monitor, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import Header from './components/Header';
 import StatsCards from './components/StatsCards';
 import ExpenseList from './components/ExpenseList';
@@ -9,8 +9,7 @@ import FinancialShameCard from './components/FinancialShameCard';
 import { useExpenses } from './hooks/useExpenses';
 import { useRoast } from './hooks/useRoast';
 import { useShameCard } from './hooks/useShameCard';
-
-type Tab = 'debt' | 'waste' | 'roast' | 'intel';
+import type { Expense } from './types';
 
 function App() {
   const {
@@ -39,8 +38,6 @@ function App() {
     shareCard,
     downloadCard
   } = useShameCard();
-
-  const [activeTab, setActiveTab] = useState<Tab>('debt');
   const [showRoast, setShowRoast] = useState(false);
   const [showShameCard, setShowShameCard] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
@@ -49,10 +46,15 @@ function App() {
   const totalSpent = getTotalSpent();
   const expenseCount = getExpenseCount();
 
-  const handleOpenRoast = useCallback(() => {
-    setShowRoast(true);
-    generateRoast(expenses);
-  }, [expenses, generateRoast]);
+  const handleAddExpense = useCallback(async (expense: Omit<Expense, 'id'>): Promise<number | null> => {
+    const id = await addExpense(expense);
+    if (id !== null) {
+      const updatedExpenses: Expense[] = [...expenses, { ...expense, id }];
+      setShowRoast(true);
+      generateRoast(updatedExpenses);
+    }
+    return id;
+  }, [addExpense, expenses, generateRoast]);
 
   const handleRegenerateRoast = useCallback(() => {
     generateRoast(expenses);
@@ -76,11 +78,11 @@ function App() {
   return (
     <div className="bg-background text-on-background min-h-screen pb-28 md:pb-0 noise-bg font-brutal">
       <Header
-        onOpenRoast={handleOpenRoast}
+        onOpenRoast={() => { setShowRoast(true); generateRoast(expenses); }}
         onClearAll={handleClearAll}
       />
 
-      <main className="px-safe-margin pt-stack-lg max-w-4xl mx-auto space-y-stack-lg">
+      <main className="px-safe-margin pt-stack-lg pb-stack-lg max-w-4xl mx-auto space-y-stack-lg">
         {confirmClear && (
           <div className="bg-error/20 border-2 border-error/30 rounded-xl p-3 text-center animate-pulse">
             <p className="text-xs text-error font-bold uppercase">
@@ -106,9 +108,7 @@ function App() {
           expenseCount={expenseCount}
         />
 
-        {/* Tab Content */}
-        {activeTab === 'debt' && (
-          <section>
+        <section>
             <h3 className="font-display text-headline-lg-mobile md:text-headline-lg text-primary-container mb-stack-md uppercase glitch">
               Desastres Recientes
             </h3>
@@ -118,84 +118,13 @@ function App() {
               loading={loading}
             />
           </section>
-        )}
 
-        {activeTab === 'waste' && (
-          <section className="text-center py-16">
-            <Receipt className="mx-auto text-white/20 mb-4" size={64} />
-            <p className="text-on-surface-variant text-lg font-black uppercase">
-              Análisis de Derroche
-            </p>
-            <p className="text-white/20 text-xs mt-2">
-              Desglose detallado próximamente.
-            </p>
-          </section>
-        )}
-
-        {activeTab === 'roast' && (
-          <section className="text-center py-16">
-            <MessageCircleWarning className="mx-auto text-toxic-red mb-4" size={64} />
-            <p className="text-on-surface-variant text-lg font-black uppercase">
-              Que te Burlén
-            </p>
-            <button
-              onClick={handleOpenRoast}
-              className="mt-4 px-8 py-4 bg-error/20 border-4 border-error/30 rounded-none text-error font-black uppercase tracking-widest hover:bg-error/30 transition-all active:scale-95"
-            >
-              Generar Burla
-            </button>
-          </section>
-        )}
-
-        {activeTab === 'intel' && (
-          <section className="text-center py-16">
-            <Monitor className="mx-auto text-toxic-purple mb-4" size={64} />
-            <p className="text-on-surface-variant text-lg font-black uppercase">
-              Inteligencia Financiera
-            </p>
-            <p className="text-white/20 text-xs mt-2">
-              Análisis financiero con IA próximamente.
-            </p>
-          </section>
-        )}
       </main>
 
       {/* FAB */}
-      <ExpenseForm onAddExpense={addExpense} />
+      <ExpenseForm onAddExpense={handleAddExpense} />
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full z-50 border-t-4 border-primary-container bg-toxic-black md:hidden">
-        <div className="flex justify-around items-stretch h-20 bg-toxic-black">
-          <TabButton
-            icon={Wallet}
-            label="DEUDA"
-            active={activeTab === 'debt'}
-            onClick={() => setActiveTab('debt')}
-            activeColor="bg-primary-container text-toxic-black"
-          />
-          <TabButton
-            icon={Receipt}
-            label="GASTOS"
-            active={activeTab === 'waste'}
-            onClick={() => setActiveTab('waste')}
-            activeColor="text-toxic-orange"
-          />
-          <TabButton
-            icon={MessageCircleWarning}
-            label="BURLA"
-            active={activeTab === 'roast'}
-            onClick={() => setActiveTab('roast')}
-            activeColor="text-toxic-red"
-          />
-          <TabButton
-            icon={Monitor}
-            label="INTEL"
-            active={activeTab === 'intel'}
-            onClick={() => setActiveTab('intel')}
-            activeColor="text-toxic-purple"
-          />
-        </div>
-      </nav>
+
 
       <RoastModal
         isOpen={showRoast}
@@ -265,32 +194,6 @@ function App() {
         </>
       )}
     </div>
-  );
-}
-
-function TabButton({
-  icon: Icon,
-  label,
-  active,
-  onClick,
-  activeColor
-}: {
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  label: string;
-  active: boolean;
-  onClick: () => void;
-  activeColor: string;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className={`flex flex-col items-center justify-center p-stack-xs active:scale-95 transition-transform flex-1 ${
-        active ? activeColor : 'text-on-surface-variant'
-      }`}
-    >
-      <Icon size={24} className={active ? '' : ''} />
-      <span className="font-data text-label-mono mt-1 tracking-widest">{label}</span>
-    </button>
   );
 }
 

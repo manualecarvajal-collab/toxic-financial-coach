@@ -1,14 +1,15 @@
 # Cerebro - Toxic Financial Coach 🧠
 
 ## Estado del Proyecto
-- **Fase Actual**: 1 & 2 Completadas (Motor Gemini Integrado)
-- **Tecnologías**: React, Vite, TS, Tailwind v4, Framer Motion, Dexie.js.
+- **Fase Actual**: 4 — Personaje 3D + TTS (Voz y Animación)
+- **Tecnologías**: React, Vite, TS, Tailwind v4, Dexie.js, Three.js (R3F/Drei).
 - **Arquitectura**: Client-side (IndexedDB) + Vercel Edge Proxy.
-- **IA**: Google Gemini 1.5 Flash (Gratis y Rápido).
+- **IA**: Google Gemini 2.5 Flash Lite + Google Cloud Text-to-Speech.
+- **Personaje**: GLB 3D (indio en kurta, Mixamo rig) renderizado con Three.js.
 - **GitHub**: https://github.com/manualecarvajal-collab/toxic-financial-coach
 
 ## Hitos Logrados
-- [x] Motor Gemini 1.5 Flash integrado en Vercel Edge.
+- [x] Motor Gemini 2.5 Flash Lite integrado en Vercel Edge.
 - [x] Base de datos local con Dexie.js.
 - [x] Social Shame Card operativa.
 - [x] Build de producción verificada.
@@ -18,6 +19,12 @@
 - [x] Bottom navigation con 4 tabs (DEUDA/GASTOS/BURLA/INTEL).
 - [x] Flicker fix para Tecno Spark 20 / MediaTek.
 - [x] Mock roasts con replaceAll + 4 variantes de empty state.
+- [x] Burla automática al agregar gasto (sin botón manual).
+- [x] Prompt engineering: 4 personalidades dinámicas + few-shot + temperatura 0.85.
+- [x] Personaje 3D animado en modal de burla (Three.js + Center + useAnimations).
+- [x] TTS con voz masculina Hindi (Google Cloud TTS `hi-IN-Standard-B`).
+- [x] Fallback automático a Web Speech API si falta TTS_API_KEY.
+- [x] Orquestación: roast → animación → TTS → transición de estados.
 
 ## Próximos Pasos (En Vercel)
 1. Importar el repositorio en Vercel.
@@ -28,8 +35,11 @@
 4. ¡Listo para humillar!
 
 ## Decisiones Técnicas Clave
-- **Gemini 1.5 Flash**: Elegido por su capa gratuita superior y velocidad de respuesta.
+- **Gemini 2.5 Flash Lite**: Reemplazo de 1.5 Flash (shutdown). Costo eficiente, buena velocidad.
 - **JSON Mode**: Forzamos a Gemini a responder en formato JSON estructurado para mayor robustez.
+- **Prompt dinámico**: `selectPersona()` elige entre 4 moods según monto/cantidad de gastos.
+- **Few-shot**: 3 ejemplos inline en el prompt para guiar tono y estructura.
+- **Temperatura 0.85**: Balance entre creatividad y coherencia.
 
 ## Rediseño Brutalista (Junio 2026)
 
@@ -65,9 +75,10 @@ Rediseño completo inspirado en **brutalismo digital** (Anton, bordes gruesos, s
 **Flujo de navegación:**
 - DEUDA → lista de gastos (home)
 - GASTOS → análisis de derroche (placeholder)
-- BURLA → genera roast con IA
+- BURLA → genera roast con IA (manual / regeneración)
 - INTEL → inteligencia financiera (placeholder)
-- FAB (+) → pantalla completa de nuevo gasto
+- FAB (+) → pantalla completa de nuevo gasto → **auto-genera burla al confirmar**
+- Header → botón "Burla" genera roast con gastos actuales
 
 ### Archivos de diseño
 - `stitch-redesign.md` — Brief original para Stitch
@@ -97,6 +108,22 @@ Rediseño completo inspirado en **brutalismo digital** (Anton, bordes gruesos, s
   1. `src/index.css` — Agregar `backface-visibility: hidden` y `-webkit-backface-visibility: hidden` en `html`. Fuerza a Chrome a crear un GPU layer estable desde el paint inicial (fix clásico para flickering en Chrome Android con GPUs problemáticas).
   2. `src/index.css` — Agregar `min-height: 100dvh` con fallback `100vh` en `html, body` para evitar reflow de la address bar.
   3. `src/App.tsx` — Cambiar `min-h-screen` → `min-h-[100dvh]` para usar dynamic viewport height.
+- **Estado**: ✅ Corregido
+
+### [P3] Gemini 1.5 Flash shut down (404)
+- **Síntoma**: La API devolvía `models/gemini-1.5-flash is not found for API v1beta`.
+- **Causa raíz**: Google dio de baja todos los modelos Gemini 1.5 en 2025.
+- **Solución**: Migrar a `gemini-2.5-flash-lite` en `api/roast.ts`.
+- **Estado**: ✅ Corregido
+
+### [P4] Roast siempre con los mismos 4 textos mock
+- **Síntoma**: El usuario veía siempre los mismos 4 textos ("MOCK" en el modal).
+- **Causa raíz**: La API de Gemini fallaba (modelo shutdown + error en system_instruction) y el frontend caía a `MOCK_ROASTS`.
+- **Solución**:
+  1. Cambiar modelo a `gemini-2.5-flash-lite`.
+  2. Eliminar `system_instruction` (no soportado correctamente con responseMimeType) → inline prompt.
+  3. Agregar badge IA/MOCK en el modal para debugging visual.
+  4. Pasar `_debug` con el mensaje de error real cuando cae a mock.
 - **Estado**: ✅ Corregido
 
 ### [P2] Roast duplicado / error al generar con gastos

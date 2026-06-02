@@ -10,6 +10,8 @@ export interface RoastResponse {
   roast: string;
   toxicGrade: string;
   uselessFact: string;
+  _mode?: 'ai' | 'mock';
+  _debug?: string;
 }
 
 export type RoastStatus = 'idle' | 'thinking' | 'roasting' | 'done' | 'error';

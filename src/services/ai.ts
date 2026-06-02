@@ -4,6 +4,8 @@ export interface RoastResponse {
   roast: string;
   toxicGrade: string;
   uselessFact: string;
+  _mode?: 'ai' | 'mock';
+  _debug?: string;
 }
 
 interface RoastPayload {
@@ -133,7 +135,7 @@ export async function getRoast(expenses: Expense[]): Promise<RoastResponse> {
   const payload = buildPayload(expenses);
 
   if (payload.expenses.length === 0) {
-    return getRandomItem(EMPTY_ROASTS);
+    return { ...getRandomItem(EMPTY_ROASTS), _mode: 'mock' };
   }
 
   try {
@@ -146,13 +148,21 @@ export async function getRoast(expenses: Expense[]): Promise<RoastResponse> {
     });
 
     if (!response.ok) {
-      throw new Error('Proxy no disponible');
+      const errorBody = await response.text();
+      const errorInfo = `API error ${response.status}: ${errorBody.slice(0, 300)}`;
+      console.error('🤖', errorInfo);
+      throw new Error(errorInfo);
     }
 
-    return await response.json();
-  } catch {
-    // Fallback: modo offline con respuestas pre-generadas
-    console.warn('🤖 Usando modo offline - conecta a Vercel para la IA real');
-    return getMockRoast(expenses);
+    const result: RoastResponse = await response.json();
+    result._mode = 'ai';
+    return result;
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Error desconocido';
+    console.error('🤖 Usando mock. Motivo:', msg);
+    const mock = getMockRoast(expenses);
+    mock._mode = 'mock';
+    mock._debug = msg;
+    return mock;
   }
 }
